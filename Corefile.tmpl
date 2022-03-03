@@ -3,7 +3,7 @@
 
     # ip-a-b-c-d.example A a.b.c.d
     template IN A <domain> {
-      match (^|[.])ip-(?P<a>[0-9]*)-(?P<b>[0-9]*)-(?P<c>[0-9]*)-(?P<d>[0-9]*)\.<domain_escaped>[.]$
+      match (^|[.])ip-(?P<a>[0-9]*)-(?P<b>[0-9]*)-(?P<c>[0-9]*)-(?P<d>[0-9]*)\.([a-zA-Z0-9][\w-]*[a-zA-Z0-9])\.<domain_escaped>[.]$
       answer "{{ .Name }} 60 IN A {{ .Group.a }}.{{ .Group.b }}.{{ .Group.c }}.{{ .Group.d }}"
       fallthrough
     }
