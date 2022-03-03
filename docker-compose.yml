@@ -10,6 +10,7 @@ services:
     environment:
       DOMAIN: ${DOMAIN}
       APIKEY: ${APIKEY} # same as PDNS_api_key
+      SOA: ${SOA}
   powerdns:
     image: pschiffe/pdns-mysql
     depends_on:

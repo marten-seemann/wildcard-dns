@@ -1,5 +1,9 @@
-. {
+<domain> {
     log
+
+    records {
+      @ 60  IN SOA <soa>
+    }
 
     # ip-a-b-c-d.example A a.b.c.d
     template IN A <domain> {
@@ -8,5 +12,7 @@
       fallthrough
     }
 
-    forward . <coredns>
+    forward . <powerdns> {
+      except <domain>
+    }
 }
