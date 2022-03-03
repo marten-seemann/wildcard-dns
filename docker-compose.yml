@@ -7,6 +7,8 @@ services:
       - powerdns
     ports:
       - "5312:53/udp"
+    environment:
+      DOMAIN: "libp2p.direct"
   powerdns:
     image: pschiffe/pdns-mysql
     depends_on:
