@@ -6,33 +6,30 @@ services:
     depends_on:
       - powerdns
     ports:
-      - "5312:53/udp"
+      - "53:53/udp"
     environment:
-      DOMAIN: "libp2p.xyz"
-      APIKEY: "apikey" # same as PDNS_api_key
+      DOMAIN: ${DOMAIN}
+      APIKEY: ${APIKEY} # same as PDNS_api_key
   powerdns:
     image: pschiffe/pdns-mysql
     depends_on:
       - mysql
     ports:
-      - "5335:53/udp" # for debugging
       - "8081:8081"
     environment:
       PDNS_master: "yes"
       PDNS_daemon: "no"
       PDNS_guardian: "no"
       PDNS_gmysql_host: "mysql"
-      PDNS_gmysql_password: "p4ssw0rd" # same as MYSQL_ROOT_PASSWORD
+      PDNS_gmysql_password: ${MYSQL_ROOT_PASSWORD}
       PDNS_webserver: "yes"
       PDNS_api: "yes"
-      PDNS_api_key: "apikey"
+      PDNS_api_key: ${APIKEY}
       PDNS_webserver_address: "0.0.0.0"
       PDNS_webserver_allow_from: "0.0.0.0/0"
   mysql:
     image: mysql/mysql-server
     environment:
-      MYSQL_ROOT_PASSWORD: "p4ssw0rd"
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
       MYSQL_ROOT_HOST: "%"
     restart: always
-    ports:
-      - "3306:3306" # for debugging
