@@ -11,6 +11,7 @@ services:
       DOMAIN: ${DOMAIN}
       APIKEY: ${APIKEY} # same as PDNS_api_key
       SOA: ${SOA}
+      NAMESERVER_IP: ${NAMESERVER_IP}
   powerdns:
     image: pschiffe/pdns-mysql
     depends_on:

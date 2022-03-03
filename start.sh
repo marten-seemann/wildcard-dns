@@ -6,7 +6,7 @@ timestamp=$(date +%s)
 
 # coredns doesn't like unresolved hostnames in forward directives
 # resolve the IP address that Docker assigned to the powerdns container now
-sed "s/<powerdns>/$(dig +short powerdns)/g" Corefile.tmpl | sed "s/<domain_escaped>/$domain_escaped/g" | sed "s/<domain>/$DOMAIN/g" | sed "s/<timestamp>/$timestamp/g" | sed "s/<soa>/$SOA/g" > Corefile
+sed "s/<powerdns>/$(dig +short powerdns)/g" Corefile.tmpl | sed "s/<domain_escaped>/$domain_escaped/g" | sed "s/<domain>/$DOMAIN/g" | sed "s/<timestamp>/$timestamp/g" | sed "s/<soa>/$SOA/g" | sed "s/<nameserver-ip>/$NAMESERVER_IP/g" > Corefile
 
 /wait-for-it.sh powerdns:8081 -t 30
 
