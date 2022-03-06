@@ -1,19 +1,19 @@
 <domain> {
-    log
+  log
 
-    records {
-      @   60  IN SOA <soa>
-      ns1 60  IN A <nameserver-ip>
-    }
+  records {
+    @   60  IN SOA <soa>
+    ns1 60  IN A <nameserver-ip>
+  }
 
-    # ip-a-b-c-d.example A a.b.c.d
-    template IN A <domain> {
-      match (^|[.])ip-(?P<a>[0-9]*)-(?P<b>[0-9]*)-(?P<c>[0-9]*)-(?P<d>[0-9]*)\.([a-zA-Z0-9][\w-]*[a-zA-Z0-9])\.<domain_escaped>[.]$
-      answer "{{ .Name }} 60 IN A {{ .Group.a }}.{{ .Group.b }}.{{ .Group.c }}.{{ .Group.d }}"
-      fallthrough
-    }
+  # ip-a-b-c-d.example A a.b.c.d
+  template IN A <domain> {
+    match (^|[.])ip-(?P<a>[0-9]*)-(?P<b>[0-9]*)-(?P<c>[0-9]*)-(?P<d>[0-9]*)\.([a-zA-Z0-9][\w-]*[a-zA-Z0-9])\.<domain_escaped>[.]$
+    answer "{{ .Name }} 60 IN A {{ .Group.a }}.{{ .Group.b }}.{{ .Group.c }}.{{ .Group.d }}"
+    fallthrough
+  }
 
-    forward . <powerdns> {
-      except <domain> ns1.<domain>
-    }
+  mysql {
+    dsn root:<mysql-root-pw>@tcp(mysql:3306)/coredns
+  }
 }

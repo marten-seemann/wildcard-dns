@@ -4,31 +4,15 @@ services:
   coredns:
     build: .
     depends_on:
-      - powerdns
+      - mysql
     ports:
       - "53:53/udp"
     environment:
       DOMAIN: ${DOMAIN}
-      APIKEY: ${APIKEY} # same as PDNS_api_key
+      APIKEY: ${APIKEY}
       SOA: ${SOA}
       NAMESERVER_IP: ${NAMESERVER_IP}
-  powerdns:
-    image: pschiffe/pdns-mysql
-    depends_on:
-      - mysql
-    ports:
-      - "8081:8081"
-    environment:
-      PDNS_master: "yes"
-      PDNS_daemon: "no"
-      PDNS_guardian: "no"
-      PDNS_gmysql_host: "mysql"
-      PDNS_gmysql_password: ${MYSQL_ROOT_PASSWORD}
-      PDNS_webserver: "yes"
-      PDNS_api: "yes"
-      PDNS_api_key: ${APIKEY}
-      PDNS_webserver_address: "0.0.0.0"
-      PDNS_webserver_allow_from: "0.0.0.0/0"
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
   mysql:
     image: mysql/mysql-server
     environment:

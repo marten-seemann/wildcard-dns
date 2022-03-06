@@ -6,10 +6,10 @@ timestamp=$(date +%s)
 
 # coredns doesn't like unresolved hostnames in forward directives
 # resolve the IP address that Docker assigned to the powerdns container now
-sed "s/<powerdns>/$(dig +short powerdns)/g" Corefile.tmpl | sed "s/<domain_escaped>/$domain_escaped/g" | sed "s/<domain>/$DOMAIN/g" | sed "s/<timestamp>/$timestamp/g" | sed "s/<soa>/$SOA/g" | sed "s/<nameserver-ip>/$NAMESERVER_IP/g" > Corefile
+sed "s/<powerdns>/$(dig +short powerdns)/g" Corefile.tmpl | sed "s/<domain_escaped>/$domain_escaped/g" | sed "s/<domain>/$DOMAIN/g" | sed "s/<timestamp>/$timestamp/g" | sed "s/<soa>/$SOA/g" | sed "s/<nameserver-ip>/$NAMESERVER_IP/g" | sed "s/<mysql-root-pw>/$MYSQL_ROOT_PASSWORD/g" > Corefile
 
-/wait-for-it.sh powerdns:8081 -t 30
+/wait-for-it.sh mysql:3306 -t 30
 
-curl -X POST --data '{"name":"'$DOMAIN'.", "kind": "Master", "dnssec":false, "soa-edit":"'$timestamp'", "masters": [], "nameservers": ["ns1.'$DOMAIN'."]}' -s -H "X-API-Key: $APIKEY" http://powerdns:8081/api/v1/servers/localhost/zones
+mysql -h mysql -u root -p"$MYSQL_ROOT_PASSWORD" < ./setup.sql
 
 /coredns
