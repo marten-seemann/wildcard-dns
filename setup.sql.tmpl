@@ -11,3 +11,7 @@ CREATE TABLE IF NOT EXISTS `coredns_records` (
 	`record_type` VARCHAR(255) NOT NULL,
 	PRIMARY KEY (`id`)
 ) ENGINE = INNODB AUTO_INCREMENT = 6 DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci;
+
+INSERT INTO `coredns_records` (`zone`, `name`, `ttl`, `content`, `record_type`) VALUES ("<domain>.", "", 3600, "<soa>", "SOA");
+INSERT INTO `coredns_records` (`zone`, `name`, `ttl`, `content`, `record_type`) VALUES ("<domain>.", "", 3600, "ns1.<domain>", "NS");
+INSERT INTO `coredns_records` (`zone`, `name`, `ttl`, `content`, `record_type`) VALUES ("<domain>.", "ns1", 3600, "<ns>", "A");

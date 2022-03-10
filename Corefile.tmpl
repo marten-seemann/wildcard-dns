@@ -6,9 +6,4 @@
   mysql {
     dsn root:<mysql-root-pw>@tcp(mysql:3306)/coredns
   }
-
-  records {
-    @   60  IN SOA <soa>
-    ns1 60  IN A <nameserver-ip>
-  }
 }
