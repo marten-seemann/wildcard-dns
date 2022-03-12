@@ -6,7 +6,8 @@ WORKDIR /coredns
 RUN go get github.com/marten-seemann/coredns-multiaddr github.com/cloud66-oss/coredns_mysql
 
 # include the fix in https://github.com/cloud66-oss/coredns_mysql/pull/5
-RUN git clone https://github.com/marten-seemann/coredns_mysql --branch fix-zone-requests --single-branch /coredns_mysql
+# and https://github.com/cloud66-oss/coredns_mysql/pull/6
+RUN git clone https://github.com/marten-seemann/coredns_mysql --depth 1 /coredns_mysql
 RUN echo "replace github.com/cloud66-oss/coredns_mysql => /coredns_mysql" >> go.mod
 
 # The order of the plugins matters!
