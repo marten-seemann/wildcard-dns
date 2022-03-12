@@ -10,7 +10,6 @@ services:
     environment:
       DOMAIN: ${DOMAIN}
       APIKEY: ${APIKEY}
-      SOA: ${SOA}
       NAMESERVER_IP: ${NAMESERVER_IP}
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
   mysql:

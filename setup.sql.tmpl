@@ -10,8 +10,10 @@ CREATE TABLE IF NOT EXISTS `coredns_records` (
 	`content` TEXT,
 	`record_type` VARCHAR(255) NOT NULL,
 	PRIMARY KEY (`id`)
-) ENGINE = INNODB AUTO_INCREMENT = 6 DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci;
+) ENGINE = INNODB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci;
 
-INSERT INTO `coredns_records` (`zone`, `name`, `ttl`, `content`, `record_type`) VALUES ("<domain>.", "", 3600, "<soa>", "SOA");
-INSERT INTO `coredns_records` (`zone`, `name`, `ttl`, `content`, `record_type`) VALUES ("<domain>.", "", 3600, "ns1.<domain>", "NS");
-INSERT INTO `coredns_records` (`zone`, `name`, `ttl`, `content`, `record_type`) VALUES ("<domain>.", "ns1", 3600, "<ns>", "A");
+TRUNCATE `coredns_records`;
+
+INSERT INTO `coredns_records` (`zone`, `name`, `ttl`, `content`, `record_type`) VALUES ("<domain>.", "", 3600, '{"ns": "ns1.<domain>.", "MBox": "hostmaster.<domain>.", "refresh": 86400, "retry": 7200, "expire": 3600, "minttl": 360}', "SOA");
+INSERT INTO `coredns_records` (`zone`, `name`, `ttl`, `content`, `record_type`) VALUES ("<domain>.", "", 3600, '{"host": "ns1.<domain>."}', "NS");
+INSERT INTO `coredns_records` (`zone`, `name`, `ttl`, `content`, `record_type`) VALUES ("<domain>.", "ns1", 3600, '{"ip": "<ns>"}', "A");
