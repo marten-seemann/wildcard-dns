@@ -1,14 +1,16 @@
-CREATE DATABASE IF NOT EXISTS `coredns`;
+DROP DATABASE IF EXISTS `coredns`;
+CREATE DATABASE `coredns`;
 USE `coredns`;
 
-/* see https://coredns.io/explugins/mysql/#database-setup */
-CREATE TABLE IF NOT EXISTS `coredns_records` (
+-- see https://coredns.io/explugins/mysql/#database-setup
+CREATE TABLE `coredns_records` (
   `id` INT NOT NULL AUTO_INCREMENT,
 	`zone` VARCHAR(255) NOT NULL,
 	`name` VARCHAR(255) NOT NULL,
 	`ttl` INT DEFAULT NULL,
 	`content` TEXT,
 	`record_type` VARCHAR(255) NOT NULL,
+	`created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP, -- for garbage collection of stale challenges
 	PRIMARY KEY (`id`)
 ) ENGINE = INNODB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci;
 
@@ -17,3 +19,8 @@ TRUNCATE `coredns_records`;
 INSERT INTO `coredns_records` (`zone`, `name`, `ttl`, `content`, `record_type`) VALUES ("<domain>.", "", 3600, '{"ns": "ns1.<domain>.", "MBox": "hostmaster.<domain>.", "refresh": 86400, "retry": 7200, "expire": 3600, "minttl": 360}', "SOA");
 INSERT INTO `coredns_records` (`zone`, `name`, `ttl`, `content`, `record_type`) VALUES ("<domain>.", "", 3600, '{"host": "ns1.<domain>."}', "NS");
 INSERT INTO `coredns_records` (`zone`, `name`, `ttl`, `content`, `record_type`) VALUES ("<domain>.", "ns1", 3600, '{"ip": "<ns>"}', "A");
+
+-- garbage collect stale challenges after 10 minutes
+DROP EVENT IF EXISTS cleanup;
+CREATE EVENT cleanup ON SCHEDULE EVERY 2 MINUTE DO
+  DELETE FROM `coredns_records` WHERE `record_type`="TXT" AND `name` LIKE "\_acme-challenge.%" AND `created_at` < NOW() - INTERVAL 10 MINUTE;
