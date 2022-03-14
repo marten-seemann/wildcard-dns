@@ -9,7 +9,6 @@ services:
       - "53:53/udp"
     environment:
       DOMAIN: ${DOMAIN}
-      APIKEY: ${APIKEY}
       NAMESERVER_IP: ${NAMESERVER_IP}
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
   mysql:
